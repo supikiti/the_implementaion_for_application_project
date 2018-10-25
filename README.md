@@ -8,4 +8,20 @@ $ python main.py
 ```
 
 ### 内容
-各コードの説明はあとでやります. 
+#### environment.py
+各種環境変数を格納するclass
+
+#### ships.py
+船class
+
+#### windfarm.py
+風力発電class
+
+#### ship_plan.py
+船classをスケジューリングするclass
+
+#### windfarm_state.py
+風車の状態をまとめるclass
+
+#### main.py
+船と風車の総状態を時間ステップごとに更新する
