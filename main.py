@@ -31,6 +31,8 @@ def main():
 		windfarm_state.time_step(t)
 		ship_plan.time_step(t)
 	print("total_calc_generated_kwh", windfarm_state.total_calc_generated_kwh())
+	print("total_driving_cost", ship_plan.total_driving_cost)
+	print("repayment cost", 400000000 * args.total_number_of_ships)
 	print("total_profit", windfarm_state.total_calc_generated_kwh() -
 						  ship_plan.total_driving_cost - 400000000 *
 						  args.total_number_of_ships)
