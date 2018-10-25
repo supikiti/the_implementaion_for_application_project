@@ -12,6 +12,7 @@ class Windfarm():
 		self.progress_inspection_time = 0
 		self.time_from_last_inspection = 0
 
+		self.generating_power = 0
 		self.generated_power = 0
 		self.is_running = True
 
@@ -21,9 +22,12 @@ class Windfarm():
 	def generate_power(self, t):
 		if self.need_inspection == False and self.need_repair == False:
 			if self.wind_state[t] == 1:
-				self.generated_power += 6 * 1900
+				self.generating_power = 6 * 1900
 			elif self.wind_state[t] == 2 | self.wind_state[t] == 3:
-				self.generated_power += 6 * 5000
+				self.generating_power = 6 * 5000
+			else:
+				self.generating_power = 0
+			self.generated_power += generating_power
 
 	def broken_occasionally(self):
 		if not self.need_repair:

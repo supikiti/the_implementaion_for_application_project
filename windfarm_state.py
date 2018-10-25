@@ -10,8 +10,8 @@ class Windfarm_state():
 		self.all_windfarm = [Windfarm(k, environment.wind_power_rank) \
 							for k in range(total_windfarm_num)]
 
-		self.need_repair_all = self.check_need_repair_all()
 		self.need_inspection_all = self.check_need_inspection_all()
+		self.need_repair_all = self.check_need_repair_all()
 		self.progress_repair_time_all = self.check_progress_repair_all()
 		self.progress_inspection_time_all = \
 			self.check_progress_inspection_all()
@@ -40,6 +40,7 @@ class Windfarm_state():
 	def time_from_last_inspection_all(self):
 		return [wf.time_from_last_inspection
 				for wf in self.all_windfarm]
+
 
 	def total_calc_generated_kwh(self):
 		return sum([wf.generated_power for wf in self.all_windfarm]) / 36

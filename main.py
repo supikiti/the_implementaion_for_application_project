@@ -20,6 +20,8 @@ def main():
 	args = arg_parse()
 	environment = Environment()
 	windfarm_state = Windfarm_state(environment)
+	plot_array = np.zeros([args.total_number_of_ships, \
+						   args.total_step_by_three_hour])
 
 	# 初期状態は, 0 ~ 3まで船が点検している状態
 	for i in range(args.total_number_of_ships):
@@ -30,12 +32,18 @@ def main():
 	for t in range(args.total_step_by_three_hour):
 		windfarm_state.time_step(t)
 		ship_plan.time_step(t)
+		plot_array[:, t] = [wf.generating_power for wf in \
+							windfarm_state.all_windfarm]
+
 	print("total_calc_generated_kwh", windfarm_state.total_calc_generated_kwh())
 	print("total_driving_cost", ship_plan.total_driving_cost)
 	print("repayment cost", 400000000 * args.total_number_of_ships)
 	print("total_profit", windfarm_state.total_calc_generated_kwh() -
 						  ship_plan.total_driving_cost - 400000000 *
 						  args.total_number_of_ships)
+	plt.imshow(plot_array)
+	plt.savefig("data/generating_power.png")
+
 
 if __name__ == "__main__":
 	sys.exit(main())
