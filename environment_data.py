@@ -36,7 +36,8 @@ class Environment():
 			pre = hist[-1]
 			tmp = np.random.choice(np.arange(5), p=markov_array[pre])
 			hist.extend([tmp, tmp])
-		return np.array(hist)
+		self.wind_hist = np.array(hist)
+		return self.wind_hist
 
 	def calc_time_to_work(self):
 		hist = self.make_wind_histgram()
@@ -45,3 +46,6 @@ class Environment():
 
 	def return_can_work_array(self):
 		return self.can_work
+
+	def return_day(self):
+		return self.day

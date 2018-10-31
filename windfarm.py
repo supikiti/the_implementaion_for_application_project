@@ -22,12 +22,16 @@ class Windfarm():
 	def generate_power(self, t):
 		if self.need_inspection == False and self.need_repair == False:
 			if self.wind_state[t] == 1:
+				# 1.9MWh = 1900kWh
 				self.generating_power = 6 * 1900
 			elif self.wind_state[t] == 2 | self.wind_state[t] == 3:
+				# 5.0MWh = 5000kWh
 				self.generating_power = 6 * 5000
 			else:
 				self.generating_power = 0
-			self.generated_power += generating_power
+		else:
+			self.generating_power = 0
+		self.generated_power += self.generating_power
 
 	def broken_occasionally(self):
 		if not self.need_repair:
@@ -43,9 +47,14 @@ class Windfarm():
 		else:
 			self.time_from_last_inspection += 3
 
+	def check_there_is_ship(self):
+		if self.there_is_ship:
+			self.need_inspection = True
+
 	def check_present_situation(self, state, t, tenken):
 		self.broken_occasionally()
 		self.check_need_inspection()
+		self.check_there_is_ship()
 		if state == 'inspection':
 			if self.need_inspection:
 				self.progress_inspection_time += self.there_is_ship * \
@@ -53,6 +62,7 @@ class Windfarm():
 				if self.progress_inspection_time == 36:
 					self.need_inspection = False
 					self.progress_inspection_time = 0
+					self.there_is_ship = False
 
 		elif state == 'repair':
 			if self.need_repair:
@@ -61,6 +71,7 @@ class Windfarm():
 				if self.progress_repair_time == 120:
 					self.need_repair = False
 					self.progress_repair_time = 0
+					self.there_is_ship = False
 
 		self.generate_power(t)
 

@@ -4,6 +4,7 @@ from ships import Ships
 
 class Ship_plan():
 	def __init__(self, total_number_of_ships, environment, windfarm):
+		self.total_number_of_ships = total_number_of_ships
 		self.all_ships = [Ships(s) for s in range(total_number_of_ships)]
 		self.environment = environment
 		self.windfarm = windfarm
@@ -11,35 +12,53 @@ class Ship_plan():
 		self.driving_cost_per_three_hour = 125000
 		self.all_windfarm = windfarm.all_windfarm
 
-	def time_step(self, t):
-		for sh in self.all_ships:
-			self.ship_should_leave_current_windfarm(sh, t)
+	def time_step(self, t, windfarm_state):
+		self.windfarm = windfarm_state
+		self.all_windfarm = windfarm_state.all_windfarm
+		for i in range(len(self.all_ships)):
+			self.ship_should_leave_current_windfarm(i, t)
+			self.calc_driving_cost()
+		return self.all_windfarm
 
-	def ship_should_leave_current_windfarm(self, ship, t):
-		# 夕方 ~ 朝
-		if self.check_day(t):
-			if not self.check_day(t-1):
-				self.total_driving_cost += self.driving_cost_per_three_hour
-			#ship.stay_harbor = True
-			self.leave_or_stay_current_windfarm(ship)
-		# 朝 ~ 夕方
-		else:
-			self.all_windfarm[ship.target_windfarm].there_is_ship = True
-			self.leave_or_stay_current_windfarm(ship)
-			self.total_driving_cost += self.driving_cost_per_three_hour
+    # 毎時間, 沖合に出ている船の数分の運転費を計算する
+	def calc_driving_cost(self):
+		# 港に残っている船の数
+		number_of_ships_in_harbor = sum([sh.stay_harbor for sh in \
+										 self.all_ships])
+		# 港に残っていない船の数
+		number_of_driving_ships = self.total_number_of_ships - \
+									number_of_ships_in_harbor
+		# 港に残っていない船の数 × 1stepあたりの運転費
+		self.total_driving_cost += number_of_driving_ships * \
+									self.driving_cost_per_three_hour
 
-	def leave_or_stay_current_windfarm(self, ship):
-		# 移る
-		if self.all_windfarm[ship.target_windfarm].need_inspection:
-			pass
+	def ship_should_leave_current_windfarm(self, ship_num, t):
+		this_ship_target_windfarm = self.all_ships[ship_num].target_windfarm
+		# 担当する風車の点検が終わったら
+		if not self.all_windfarm[this_ship_target_windfarm].need_inspection:
+			next_windfarm = self.select_next_windfarm()
+			self.all_ships[ship_num].target_windfarm = next_windfarm
+			self.all_windfarm[next_windfarm].there_is_ship = True
+
+		# 担当する風車の点検がまだ終わっていない
 		else:
-			# ここに次はどうするかの選択をする
-			ship.target_windfarm = self.select_next_windfarm()
+			# まだ元の風車の点検が終わっていない
+			# 夜かどうか
+			if self.check_night(t):
+				self.all_ships[ship_num].stay_harbor = True
+			# 昼
+			else:
+				self.all_ships[ship_num].stay_harbor = False
 
 	def select_next_windfarm(self):
-		return np.argmax(self.windfarm.time_from_last_inspection_all)
+		tmp = np.argmax(self.windfarm.time_from_last_inspection_all())
+		self.all_windfarm[tmp].there_is_ship = True
+		self.all_windfarm[tmp].time_from_last_inspection = 0
+		return tmp
 
-	def check_day(self, t):
+	# environment.day = 1ならば昼, 0ならば夜
+	# 夜ならばTrueが返る.
+	def check_night(self, t):
 		if self.environment.day[t] == 0:
 			return True
 		else:
