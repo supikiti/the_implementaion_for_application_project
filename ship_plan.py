@@ -5,6 +5,7 @@ from ships import Ships
 class Ship_plan():
 	def __init__(self, total_number_of_ships, environment, windfarm):
 		self.total_number_of_ships = total_number_of_ships
+		# 点検船
 		self.all_ships = [Ships(s) for s in range(total_number_of_ships)]
 		self.environment = environment
 		self.windfarm = windfarm

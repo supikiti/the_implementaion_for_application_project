@@ -47,15 +47,18 @@ class Windfarm():
 		else:
 			self.time_from_last_inspection += 3
 
-	def check_there_is_ship(self):
+	def check_there_is_ship(self, state):
 		if self.there_is_ship:
-			self.need_inspection = True
+			if state == 'inspection':
+				self.need_inspection = True
+			else:
+				self.need_repair = True
 
 	def check_present_situation(self, state, t, tenken):
 		self.broken_occasionally()
 		self.check_need_inspection()
-		self.check_there_is_ship()
 		if state == 'inspection':
+			self.check_there_is_ship()
 			if self.need_inspection:
 				self.progress_inspection_time += self.there_is_ship * \
 												 tenken[t] * 3
@@ -65,6 +68,7 @@ class Windfarm():
 					self.there_is_ship = False
 
 		elif state == 'repair':
+			self.check_there_is_ship()
 			if self.need_repair:
 				self.progress_repair_time += self.there_is_ship * \
 												 tenken[t] * 3

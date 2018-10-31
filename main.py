@@ -26,6 +26,8 @@ def main():
 	plot_array = np.zeros([200, \
 						   args.total_step_by_three_hour])
 	not_driving_windfarm = []
+	need_inspection_list = []
+	need_repair_list = []
 	total_generated_power = []
 
 	# 初期状態は, 0 ~ total_nubmer_of_shipsの風車が点検されている状態
@@ -44,7 +46,13 @@ def main():
 		after_windfarm = ship_plan.time_step(t, windfarm_state)
 		plot_array[:, t] = [wf.generating_power for wf in \
 							windfarm_state.all_windfarm]
-		not_driving_windfarm.append(windfarm_state.total_driving_windfarm(after_windfarm))
+		print([s.target_windfarm for s in ship_plan.all_ships], \
+				[s.stay_harbor for s in ship_plan.all_ships])
+		count_not_driving_windfarm, count_need_inspection, count_need_repair = \
+			windfarm_state.total_not_driving_windfarm(after_windfarm)
+		not_driving_windfarm.append(count_not_driving_windfarm)
+		need_inspection_list.append(count_need_inspection)
+		need_repair_list.append(count_need_repair)
 		total_generated_power.append(windfarm_state.total_calc_generated_kwh())
 
 	print("total_calc_generated_kwh", windfarm_state.total_calc_generated_kwh())
@@ -54,12 +62,17 @@ def main():
 						  ship_plan.total_driving_cost - 400000000 *
 						  args.total_number_of_ships)
 
+	"""
 	for i in range(int(args.total_step_by_three_hour/1000)):
 		plt.figure()
 		plt.imshow(plot_array[:, i * 1000:((i + 1) * 1000)])
 		plt.savefig("data/total_generating_power/" + str(i) + ":" + str(i + 1000) + ".png")
+	"""
 	plt.figure(figsize=(20, 5))
-	plt.plot(np.arange(args.total_step_by_three_hour), not_driving_windfarm)
+	plt.plot(np.arange(args.total_step_by_three_hour), not_driving_windfarm, c="r", label="not_driving")
+	plt.plot(np.arange(args.total_step_by_three_hour), need_inspection_list, c="b", label="need_inspection")
+	plt.plot(np.arange(args.total_step_by_three_hour), need_repair_list, c="g", label="need_repair")
+	plt.legend()
 	plt.savefig("data/not_driving_windfarm.png")
 	plt.figure(figsize=(20, 5))
 	plt.plot(np.arange(args.total_step_by_three_hour), total_generated_power)

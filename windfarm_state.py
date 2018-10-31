@@ -43,12 +43,16 @@ class Windfarm_state():
 		return tmp
 
 	# 動ける風車の数を返す
-	def total_driving_windfarm(self, windfarm):
-		count = 0
+	def total_not_driving_windfarm(self, windfarm):
+		count_need_inspection = 0
+		count_need_repair = 0
 		for wi in windfarm:
-			if wi.need_inspection or wi.need_repair:
-				count += 1
-		return count
+			if wi.need_inspection:
+				count_need_inspection += 1
+			if wi.need_repair:
+				count_need_repair += 1
+		return max(count_need_repair, count_need_inspection),\
+			count_need_inspection, count_need_repair
 
 	def total_calc_generated_kwh(self):
 		return sum([wf.generated_power for wf in self.all_windfarm]) * 36
