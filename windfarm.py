@@ -58,24 +58,27 @@ class Windfarm():
 		self.broken_occasionally()
 		self.check_need_inspection()
 		if state == 'inspection':
-			self.check_there_is_ship()
+			self.check_there_is_ship(state)
 			if self.need_inspection:
-				self.progress_inspection_time += self.there_is_ship * \
-												 tenken[t] * 3
-				if self.progress_inspection_time == 36:
-					self.need_inspection = False
-					self.progress_inspection_time = 0
-					self.there_is_ship = False
+				if self.there_is_ship:
+					self.progress_inspection_time += self.there_is_ship * \
+													 tenken[t] * 3
+					if self.progress_inspection_time == 36:
+						self.need_inspection = False
+						self.time_from_last_inspection = 0
+						self.progress_inspection_time = 0
+						self.there_is_ship = False
 
 		elif state == 'repair':
-			self.check_there_is_ship()
+			self.check_there_is_ship(state)
 			if self.need_repair:
-				self.progress_repair_time += self.there_is_ship * \
-												 tenken[t] * 3
-				if self.progress_repair_time == 120:
-					self.need_repair = False
-					self.progress_repair_time = 0
-					self.there_is_ship = False
+				if self.there_is_ship:
+					self.progress_repair_time += self.there_is_ship * \
+													 tenken[t] * 3
+					if self.progress_repair_time == 120:
+						self.need_repair = False
+						self.progress_repair_time = 0
+						self.there_is_ship = False
 
 		self.generate_power(t)
 

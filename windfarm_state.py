@@ -17,6 +17,8 @@ class Windfarm_state():
 			self.check_progress_inspection_all()
 		self.time_from_last_inspection_all_ = \
 			self.time_from_last_inspection_all()
+		self.there_is_ship_all = \
+			self.check_where_is_ships()
 
 		self.total_generated_power = self.total_calc_generated_kwh()
 
@@ -41,6 +43,9 @@ class Windfarm_state():
 		tmp = [wf.time_from_last_inspection
 				for wf in self.all_windfarm]
 		return tmp
+
+	def check_where_is_ships(self):
+		return [wf.there_is_ship for wf in self.all_windfarm]
 
 	# 動ける風車の数を返す
 	def total_not_driving_windfarm(self, windfarm):
