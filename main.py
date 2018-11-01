@@ -38,6 +38,7 @@ def main():
 	ship_plan = Ship_plan(args.total_number_of_ships, environment, \
 						  windfarm_state)
 	after_windfarm = windfarm_state.all_windfarm
+
 	for t in range(args.total_step_by_three_hour):
 		if t%1000 == 0:
 			print("t = {}".format(t))
@@ -69,7 +70,6 @@ def main():
 		plt.savefig("data/total_generating_power/" + str(i) + ":" + str(i + 1000) + ".png")
 	"""
 	plt.figure(figsize=(20, 5))
-	plt.plot(np.arange(args.total_step_by_three_hour), not_driving_windfarm, c="r", label="not_driving")
 	plt.plot(np.arange(args.total_step_by_three_hour), need_inspection_list, c="b", label="need_inspection")
 	plt.plot(np.arange(args.total_step_by_three_hour), need_repair_list, c="g", label="need_repair")
 	plt.legend()
