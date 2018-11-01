@@ -25,7 +25,6 @@ def main():
 	windfarm_state = Windfarm_state(environment)
 	plot_array = np.zeros([200, \
 						   args.total_step_by_three_hour])
-	not_driving_windfarm = []
 	need_inspection_list = []
 	need_repair_list = []
 	total_generated_power = []
@@ -50,10 +49,9 @@ def main():
 		print([s.target_windfarm for s in ship_plan.all_ships], \
 				[s.stay_harbor for s in ship_plan.all_ships])
 		"""
-				
-		count_not_driving_windfarm, count_need_inspection, count_need_repair = \
+
+		count_need_inspection, count_need_repair = \
 			windfarm_state.total_not_driving_windfarm(after_windfarm)
-		not_driving_windfarm.append(count_not_driving_windfarm)
 		need_inspection_list.append(count_need_inspection)
 		need_repair_list.append(count_need_repair)
 		total_generated_power.append(windfarm_state.total_calc_generated_kwh())
@@ -64,7 +62,6 @@ def main():
 	print("total_profit", windfarm_state.total_calc_generated_kwh() -
 						  ship_plan.total_driving_cost - 400000000 *
 						  args.total_number_of_ships)
-
 	"""
 	for i in range(int(args.total_step_by_three_hour/1000)):
 		plt.figure()

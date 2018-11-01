@@ -56,8 +56,7 @@ class Windfarm_state():
 				count_need_inspection += 1
 			if wi.need_repair:
 				count_need_repair += 1
-		return max(count_need_repair, count_need_inspection),\
-			count_need_inspection, count_need_repair
+		return count_need_inspection, count_need_repair
 
 	def total_calc_generated_kwh(self):
 		return sum([wf.generated_power for wf in self.all_windfarm]) * 36
