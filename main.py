@@ -49,6 +49,7 @@ def main():
 		print([s.target_windfarm for s in ship_plan.all_ships], \
 				[s.stay_harbor for s in ship_plan.all_ships])
 		"""
+		#print([wi.time_from_last_inspection for wi in after_windfarm])
 
 		count_need_inspection, count_need_repair = \
 			windfarm_state.total_not_driving_windfarm(after_windfarm)
@@ -62,12 +63,14 @@ def main():
 	print("total_profit", windfarm_state.total_calc_generated_kwh() -
 						  ship_plan.total_driving_cost - 400000000 *
 						  args.total_number_of_ships)
-	for i in range(int(args.total_step_by_three_hour/1000)):
+	
+        for i in range(int(args.total_step_by_three_hour/1000)):
 		plt.figure()
 		plt.imshow(plot_array[:, i * 1000:((i + 1) * 1000)])
 		plt.savefig("data/total_generating_power/" + str(i) + ":" + str(i + 1000) + ".png")
-	plt.figure(figsize=(20, 5))
-	plt.plot(np.arange(args.total_step_by_three_hour), need_inspection_list, c="b", label="need_inspection")
+	
+        plt.figure(figsize=(20, 5))
+	plt.plot(np.arange(args.total_step_by_three_hour), need_inspection_list, c="r", label="need_inspection")
 	plt.plot(np.arange(args.total_step_by_three_hour), need_repair_list, c="g", label="need_repair")
 	plt.legend()
 	plt.savefig("data/not_driving_windfarm.png")

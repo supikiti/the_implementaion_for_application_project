@@ -44,8 +44,7 @@ class Windfarm():
 		if self.time_from_last_inspection == 4320:
 			self.need_inspection = True
 			self.progress_inspection_time = 0
-		else:
-			self.time_from_last_inspection += 3
+		self.time_from_last_inspection += 3
 
 	def check_there_is_ship(self, state):
 		if self.there_is_ship:
@@ -57,7 +56,17 @@ class Windfarm():
 	def check_present_situation(self, state, t, tenken):
 		self.broken_occasionally()
 		self.check_need_inspection()
-		if state == 'inspection':
+		if state == 'repair':
+			self.check_there_is_ship(state)
+			if self.need_repair:
+				if self.there_is_ship:
+					self.progress_repair_time += self.there_is_ship * \
+													 tenken[t] * 3
+					if self.progress_repair_time == 120:
+						self.need_repair = False
+						self.progress_repair_time = 0
+						self.there_is_ship = False
+		elif state == 'inspection':
 			self.check_there_is_ship(state)
 			if self.need_inspection:
 				if self.there_is_ship:
@@ -68,17 +77,7 @@ class Windfarm():
 						self.time_from_last_inspection = 0
 						self.progress_inspection_time = 0
 						self.there_is_ship = False
-
-		elif state == 'repair':
-			self.check_there_is_ship(state)
-			if self.need_repair:
-				if self.there_is_ship:
-					self.progress_repair_time += self.there_is_ship * \
-													 tenken[t] * 3
-					if self.progress_repair_time == 120:
-						self.need_repair = False
-						self.progress_repair_time = 0
-						self.there_is_ship = False
+				self.time_from_last_inspection += 3
 
 		self.generate_power(t)
 

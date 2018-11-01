@@ -66,5 +66,7 @@ class Windfarm_state():
 		for wd in self.all_windfarm:
 			wd.check_present_situation('inspection', t, \
 										self.environment.can_work)
+			"""
 			wd.check_present_situation('repair', t, \
 										self.environment.can_work)
+			"""
