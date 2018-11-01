@@ -46,8 +46,11 @@ def main():
 		after_windfarm = ship_plan.time_step(t, windfarm_state)
 		plot_array[:, t] = [wf.generating_power for wf in \
 							windfarm_state.all_windfarm]
+		"""
 		print([s.target_windfarm for s in ship_plan.all_ships], \
 				[s.stay_harbor for s in ship_plan.all_ships])
+		"""
+				
 		count_not_driving_windfarm, count_need_inspection, count_need_repair = \
 			windfarm_state.total_not_driving_windfarm(after_windfarm)
 		not_driving_windfarm.append(count_not_driving_windfarm)
