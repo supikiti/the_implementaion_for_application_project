@@ -35,8 +35,7 @@ def main():
 		windfarm_state.all_windfarm[i].there_is_ship = True
 		# 風車を点検中にする
 		windfarm_state.all_windfarm[i].need_inspection = True
-	ship_plan = Ship_plan(args.total_number_of_ships, environment, \
-						  windfarm_state)
+	ship_plan = Ship_plan(args.total_number_of_ships, environment)
 	after_windfarm = windfarm_state.all_windfarm
 
 	for t in range(args.total_step_by_three_hour):
@@ -63,12 +62,10 @@ def main():
 	print("total_profit", windfarm_state.total_calc_generated_kwh() -
 						  ship_plan.total_driving_cost - 400000000 *
 						  args.total_number_of_ships)
-	"""
 	for i in range(int(args.total_step_by_three_hour/1000)):
 		plt.figure()
 		plt.imshow(plot_array[:, i * 1000:((i + 1) * 1000)])
 		plt.savefig("data/total_generating_power/" + str(i) + ":" + str(i + 1000) + ".png")
-	"""
 	plt.figure(figsize=(20, 5))
 	plt.plot(np.arange(args.total_step_by_three_hour), need_inspection_list, c="b", label="need_inspection")
 	plt.plot(np.arange(args.total_step_by_three_hour), need_repair_list, c="g", label="need_repair")

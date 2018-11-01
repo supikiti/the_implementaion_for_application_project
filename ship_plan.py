@@ -10,7 +10,6 @@ class Ship_plan():
 		self.environment = environment
 		self.total_driving_cost = 0
 		self.driving_cost_per_three_hour = 125000
-		self.all_windfarm = windfarm.all_windfarm
 
 	def time_step(self, t, windfarm_state):
 		self.windfarm = windfarm_state
