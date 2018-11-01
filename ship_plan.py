@@ -52,6 +52,10 @@ class Ship_plan():
 				self.all_ships[ship_num].stay_harbor = False
 
 	def select_next_windfarm(self):
+		# 点検が必要な風車があればそちらに回る.
+
+		#if sum(self.windfarm.check_need_inspection_all()) >= 1:
+			#tmp = 
 		tmp = np.argmax(self.windfarm.time_from_last_inspection_all())
 		self.all_windfarm[tmp].there_is_ship = True
 		self.all_windfarm[tmp].time_from_last_inspection = 0
