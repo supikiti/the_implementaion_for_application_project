@@ -67,9 +67,11 @@ def main():
 
 	plt.figure()
 	plt.imshow(plot_array[:, 0:1 * 1000])
+	plt.savefig("1.png")
 	plt.show()
 	plt.figure()
 	plt.imshow(plot_array[:, 1000:2000])
+	plt.savefig("2.png")
 	plt.show()
 
 

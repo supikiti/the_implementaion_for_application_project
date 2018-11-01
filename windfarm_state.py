@@ -36,7 +36,7 @@ class Windfarm_state():
 				for wf in self.all_windfarm]
 
 	def check_progress_repair_all(self):
-		return [wf.need_repair \
+		return [wf.return_check_present_situation('repair')[1] \
 				for wf in self.all_windfarm]
 
 	def time_from_last_inspection_all(self):
@@ -66,5 +66,7 @@ class Windfarm_state():
 		for wd in self.all_windfarm:
 			wd.check_present_situation('inspection', t, \
 										self.environment.can_work)
+			"""
 			wd.check_present_situation('repair', t, \
 										self.environment.can_work)
+			"""
